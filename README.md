@@ -71,7 +71,7 @@
 После установки и запуска docker daemon необходимо убедиться в работе команд docker, например `docker -v`:
 
 ```posh
-User-MacBook-Pro ~ % docker -v
+docker -v
 Docker version 20.10.14, build a224086
 ```
 
@@ -86,7 +86,7 @@ docker pull confluentinc/cp-kafka:7.3.2
 После `pull` вы увидите спуленный image командой `docker images`
 
 ```posh
-mitriis-MacBook-Pro ~ % docker images            
+docker images            
 REPOSITORY                 TAG              IMAGE ID       CREATED         SIZE
 postgres                   15.1             9f3ec01f884d   10 days ago     379MB
 confluentinc/cp-kafka      7.3.2            db97697f6e28   12 months ago   457MB
@@ -105,7 +105,7 @@ docker volume create pgdata
 Запустив скрипт (Для Windows необходимо использовать bash terminal: gitbash, cygwin или wsl)
 
 ```posh
-User-MacBook-Pro  niffler % bash localenv.sh
+bash localenv.sh
 ```
 
 Или выполнив последовательно команды, для *nix:
@@ -143,14 +143,10 @@ https://github.com/confluentinc/cp-docker-images/issues/801#issuecomment-6920851
 #### 6. Подключиться к БД postgres (host: localhost, port: 5432, user: postgres, pass: secret, database name: postgres) из PgAdmin и создать пустые БД микросервисов
 
 ```sql
-create
-    database "niffler-userdata" with owner postgres;
-create
-    database "niffler-spend" with owner postgres;
-create
-    database "niffler-currency" with owner postgres;
-create
-    database "niffler-auth" with owner postgres;
+create database "niffler-userdata" with owner postgres;
+create database "niffler-spend" with owner postgres;
+create database "niffler-currency" with owner postgres;
+create database "niffler-auth" with owner postgres;
 ```
 
 #### 7. Установить Java версии 21. Это необходимо, т.к. проект использует синтаксис Java 21
@@ -158,7 +154,7 @@ create
 Версию установленной Java необходимо проверить командой `java -version`
 
 ```posh
-User-MacBook-Pro ~ % java -version
+java -version
 openjdk version "21.0.1" 2023-10-17 LTS
 OpenJDK Runtime Environment Temurin-21.0.1+12 (build 21.0.1+12-LTS)
 OpenJDK 64-Bit Server VM Temurin-21.0.1+12 (build 21.0.1+12-LTS, mixed mode)
@@ -179,13 +175,13 @@ OpenJDK 64-Bit Server VM Temurin-21.0.1+12 (build 21.0.1+12-LTS, mixed mode)
 для REST:
 
 ```posh
-User-MacBook-Pro niffler % cd niffler-frontend
+cd niffler-frontend
 ```
 
 или для GraphQL:
 
 ```posh
-User-MacBook-Pro niffler % cd niffler-frontend-gql
+cd niffler-frontend-gql
 ```
 
 #### 2. Запустить фронтенд (сначала обновить зависимости)
@@ -193,15 +189,15 @@ User-MacBook-Pro niffler % cd niffler-frontend-gql
 Для *nix:
 
 ```posh
-User-MacBook-Pro niffler-frontend % npm i
-User-MacBook-Pro niffler-frontend % npm run build:dev
+niffler-frontend % npm i
+niffler-frontend % npm run build:dev
 ```
 
 Для Windows:
 
 ```posh
-User-MacBook-Pro niffler-frontend % npm i
-User-MacBook-Pro niffler-frontend % npm run build:windows
+niffler-frontend % npm i
+niffler-frontend % npm run build:windows
 ```
 
 #### 3. Прописать run конфигурацию для всех сервисов niffler-* - Active profiles local
@@ -214,8 +210,8 @@ User-MacBook-Pro niffler-frontend % npm run build:windows
 - Запустить сервис auth
 
 ```posh
-User-MacBook-Pro niffler % cd niffler-auth
-User-MacBook-Pro niffler-auth % gradle bootRun --args='--spring.profiles.active=local'
+cd niffler-auth
+niffler-auth % gradle bootRun --args='--spring.profiles.active=local'
 ```
 
 Или просто перейдя к main-классу приложения NifflerAuthApplication выбрать run в IDEA (предварительно удостовериться что
@@ -240,7 +236,7 @@ User-MacBook-Pro niffler-auth % gradle bootRun --args='--spring.profiles.active=
 - gateway:   127.0.0.1 gateway.niffler.dc
 
 ```posh
-User-MacBook-Pro niffler % vi /etc/hosts
+vi /etc/hosts
 ```
 
 ```posh
@@ -251,15 +247,15 @@ User-MacBook-Pro niffler % vi /etc/hosts
 # when the system is booting.  Do not change this entry.
 ##
 127.0.0.1       localhost
-127.0.0.1       frontend.niffler.dc
-127.0.0.1       auth.niffler.dc
-127.0.0.1       gateway.niffler.dc
+127.0.0.1       http://frontend.niffler.dc
+127.0.0.1       http://auth.niffler.dc
+127.0.0.1       http://gateway.niffler.dc
 ```
 
 #### 5. Перейти в корневой каталог проекта
 
 ```posh
-User-MacBook-Pro niffler % cd niffler
+cd niffler
 ```
 
 #### 6. Запустить все сервисы, если необходим фронтенд GraphQL, то это указывается аргументом к скрипту:
@@ -267,13 +263,13 @@ User-MacBook-Pro niffler % cd niffler
 для REST:
 
 ```posh
-User-MacBook-Pro  niffler % bash docker-compose-dev.sh
+bash docker-compose-dev.sh
 ```
 
 для GraphQL:
 
 ```posh
-User-MacBook-Pro  niffler % bash docker-compose-dev.sh gql
+bash docker-compose-dev.sh gql
 ```
 
 Текущая версия `docker-compose-dev.sh` **удалит все запущенные Docker контейнеры в системе**, поэтому если у вас есть созданные
@@ -331,7 +327,7 @@ Build to Docker daemon failed, perhaps you should make sure your credentials for
 #### 4. Перейти в корневой каталог проекта
 
 ```posh
-User-MacBook-Pro niffler % cd niffler
+cd niffler
 ```
 
 #### 5. Собрать все имеджи, запушить и запустить niffler одной командой, если необходим фронтенд GraphQL, то это указывается аргументом к скрипту:
@@ -339,13 +335,13 @@ User-MacBook-Pro niffler % cd niffler
 для REST:
 
 ```posh
-User-MacBook-Pro  niffler % bash docker-compose-dev.sh push
+bash docker-compose-dev.sh push
 ```
 
 для GraphQL:
 
 ```posh
-User-MacBook-Pro  niffler % bash docker-compose-dev.sh gql push
+bash docker-compose-dev.sh gql push
 ```
 
 # Запуск e-2-e тестов в Docker network изолированно Niffler в докере:
@@ -353,7 +349,7 @@ User-MacBook-Pro  niffler % bash docker-compose-dev.sh gql push
 #### 1. Перейти в корневой каталог проекта
 
 ```posh
-User-MacBook-Pro niffler % cd niffler
+cd niffler
 ```
 
 #### 2. Запустить все сервисы и тесты, если необходим фронтенд GraphQL, то это указывается аргументом к скрипту:
@@ -361,13 +357,13 @@ User-MacBook-Pro niffler % cd niffler
 для REST:
 
 ```posh
-User-MacBook-Pro  niffler % bash docker-compose-e2e.sh
+bash docker-compose-e2e.sh
 ```
 
 для GraphQL:
 
 ```posh
-User-MacBook-Pro  niffler % bash docker-compose-e2e.sh gql
+bash docker-compose-e2e.sh gql
 ```
 
 #### 3. Selenoid UI доступен по адресу: http://localhost:9090/
