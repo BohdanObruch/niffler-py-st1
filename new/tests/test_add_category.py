@@ -1,6 +1,6 @@
 from niffler_tests.test_data.credentials import categories
 from niffler_tests.pages.profile_page import profile
-from niffler_tests.pages.main_page import main
+from new.niffler_tests.pages.main_page import main
 import pytest
 
 

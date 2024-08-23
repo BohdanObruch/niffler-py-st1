@@ -1,5 +1,5 @@
 from niffler_tests.pages.people_page import people
-from niffler_tests.pages.main_page import main
+from new.niffler_tests.pages.main_page import main
 
 
 def test_verify_no_friends(browser_management, authorization):
